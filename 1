@@ -1,0 +1,106 @@
+many to one mapping from source profile to destination profile.
+
+
+I have a source xml profile and within the profile there are several of the same objects with the only difference of the instance identifier. All the instance identifiers go through the different scripting functions and it returns as an output in the destination. The issue faced is that it maps only to one output profile. How to map second scripting function to destination output profile? As of now it's not allowing me to map second scripting output to the destination output. The output profiles have a looping setting of occurrence.
+
+ 
+
+Input:
+
+<Redlines>
+
+       <RedlinedBOMRow RedlineAction="Deleted">
+
+         <RedlinedBOMRowPrevious>
+
+..........
+
+         </RedlinedBOMRowPrevious>
+
+       </RedlinedBOMRow>
+
+ 
+
+       <RedlinedBOMRow RedlineAction="Changed">
+
+         <RedlinedBOMRowCurrent>
+
+.........
+
+       </RedlinedBOMRowCurrent>
+
+       </RedlinedBOMRow>
+
+ 
+
+       <RedlinedBOMRow RedlineAction="Unchanged">
+
+         <RedlinedBOMRowCurrent>
+
+.........
+
+         </RedlinedBOMRowCurrent>
+
+       </RedlinedBOMRow>
+
+ 
+
+        <RedlinedBOMRow RedlineAction="Added">
+
+         <RedlinedBOMRowCurrent>
+
+        .........
+
+         </RedlinedBOMRowCurrent>
+
+       </RedlinedBOMRow>
+
+      </Redlines>
+
+ 
+
+Expected Output:
+
+ <PARTS>
+
+   <XXTEQ_ITEMS_TBL_TYPE>
+
+    <ITEM_TRANSACTION_TYPE>Added</ITEM_TRANSACTION_TYPE>
+
+......
+
+   </XXTEQ_ITEMS_TBL_TYPE>
+
+   <XXTEQ_ITEMS_TBL_TYPE>
+
+    <ITEM_TRANSACTION_TYPE>Changed</ITEM_TRANSACTION_TYPE>
+
+.......
+
+   </XXTEQ_ITEMS_TBL_TYPE>
+
+   <XXTEQ_ITEMS_TBL_TYPE>
+
+    <ITEM_TRANSACTION_TYPE>Unchanged</ITEM_TRANSACTION_TYPE>
+
+.......
+
+   </XXTEQ_ITEMS_TBL_TYPE>
+
+   <XXTEQ_ITEMS_TBL_TYPE>
+
+    <ITEM_TRANSACTION_TYPE>Deleted</ITEM_TRANSACTION_TYPE>
+
+.......
+
+   </XXTEQ_ITEMS_TBL_TYPE>
+
+  </PARTS>
+
+ 
+
+Map Shape:
+and solution
+If I understand your map correctly, your User Defined Function is causing the problem as it is taking in each of the Instance Identifier values and then creating a single output. If you were to map the source to the target directly, you should get what you needed. If you need to have processing done in a User Defined Function, then you'll want to pass each Instance Identifier through its own function (though you can just have multiple instances of the same function used over again).
+ 
+
